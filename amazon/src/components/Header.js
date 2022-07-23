@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import axios from "axios"
+
 // export default means that in one file or module there is only one functional component
 // input element closing
 // In react every html element must be closed.
@@ -6,9 +8,11 @@ import React from 'react'
 // Jsx is parsed by using Babel in react.
 import './header.css'
 import { Link } from 'react-router-dom'
+
 import amzonImg from "../images/amazon.png"
 export default function Header({ setInputState }) {
     // console.log(setInputState);
+    
     console.log(setInputState.cart);
     function manageInput(e){
         let { value } = e.target
@@ -38,6 +42,10 @@ export default function Header({ setInputState }) {
                    <Link to="/cartpage" > <div>cart</div></Link>
                     <div className='box'>{setInputState.cart.length}</div>
                 </div>
+                <Link to="/login">
+                <div className='login'style={{color:"white"}}>Login</div>
+                </Link>
+                <div className='login'style={{color:"white"}}>Signup</div>
             </div>
         
       

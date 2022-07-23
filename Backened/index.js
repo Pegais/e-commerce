@@ -14,10 +14,13 @@ const express = require('express');
 const morgan =require("morgan")
 const helmet =require("helmet")
 const app = express();
+const cors = require('cors')
+// npm i cors
 // to make sure our server understands json information from client we use,
 app.use(express.json());
 app.use(helmet());
 app.use(morgan());
+app.use(cors())
 
 const Port = process.env.PORT || 5000;
 

@@ -3,6 +3,7 @@
 const express = require('express');
 const Loginrouter = express.Router();
 const mysql = require('mysql');
+const bcrypt = require('bcrypt');
 
 // creatpool is used for application grade connectivity in mysql
 const db = mysql.createPool({
@@ -17,9 +18,10 @@ const db = mysql.createPool({
 
 // make routes of router;
 // making a post to database while taking inputs from frontend.
-Loginrouter.post('/user', (req, res) => {
+Loginrouter.post('/user',async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
+    const encryptpassword = await bcrypt.hash(password,8) 
 
     // callback og getconnection is type of promise return type of callback.
     db.getConnection(async(err, connection) => {
@@ -32,7 +34,7 @@ Loginrouter.post('/user', (req, res) => {
         // whenever this is called we want to insert something to database;
 
         const sqlInsert = "INSERT INTO amazon_db(email,password) VALUES(?,?)";
-        const insert_query = mysql.format(sqlInsert, [email, password]);
+        const insert_query = mysql.format(sqlInsert, [email, encryptpassword]);
 
         // now asking the connection for sql database for the given email;
         await connection.query(search_query, async(err, result) => {
@@ -63,6 +65,44 @@ Loginrouter.post('/user', (req, res) => {
     })
     
 })
+// user authentication => password
+// bcrypt => comparison 
+Loginrouter.post('/userAuth', (req, res) => {
+    let email = req.body.email;
+    let password = req.body.password;
+    db.getConnection(async(err,connection) => {
+        if (err) throw (err);
+        const sqlSearch = "SELECT*FROM amazon_db WHERE email=?"
+        const search_query = mysql.format(sqlSearch, [email])    //searching for the given email
+        await connection.query(search_query, async(err, result) => {
+            if (err) throw (err);
+            if (result.length == 0) {
+                console.log("---------> User does not exist");
+                res.json({
+                    message: "User does not exist"
+                })
+                // page redirect to login page
+            } else {
+                console.log('this is result',result);
+                const hasedpassword = result[0].password;
+                console.log(hasedpassword);
+                if (await bcrypt.compare(password, hasedpassword)) {
+                    console.log("Signup successfull");
+                    res.json({
+                        message:"signup done"
+                    })
+                    // redirect to frontend's homepage
+                } else {
+                    console.log("password incorrect");
+                    res.json({
+                        message:"inncorrect password"
+                    })
+               }
+            }
+        })
+    })
+})
+
 
 
 // export the router and import in your main file => index.js

@@ -16,6 +16,7 @@ import Pant from './components/SubheaderOption/Pant';
 import Header from './components/Header';
 import Subheader from './components/Subheader';
 import Cart from './components/cartPage/Cart';
+import Login from './components/auth/Login';
 
 function App() {
   let [inputState, setInputState] = useState('');
@@ -70,6 +71,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Card inputState={{inputState, addToCart}} />} />
           <Route path="/card" element={<Card />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/cartpage" element={<Cart cart={{cart,addToCart,deleteToCart,removeCart}} />} />
           
           {/* please make a shirts component */}
