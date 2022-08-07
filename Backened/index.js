@@ -22,7 +22,7 @@ app.use(helmet());
 app.use(morgan());
 app.use(cors())
 
-const Port = process.env.PORT || 5000;
+const Port = process.env.PORT || 5001;
 
 // get request
 // req => REQUEST  = >request it is sent by client , frontend

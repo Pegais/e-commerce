@@ -78,20 +78,17 @@ Loginrouter.post('/userAuth', (req, res) => {
             if (err) throw (err);
             if (result.length == 0) {
                 console.log("---------> User does not exist");
-                res.json({
-                    message: "User does not exist"
-                })
                 // page redirect to login page
+               res.json({message:"error"})
+
             } else {
                 console.log('this is result',result);
                 const hasedpassword = result[0].password;
                 console.log(hasedpassword);
                 if (await bcrypt.compare(password, hasedpassword)) {
                     console.log("Signup successfull");
-                    res.json({
-                        message:"signup done"
-                    })
-                    // redirect to frontend's homepage
+                   res.json({message:"success",testData:"data"})
+                    
                 } else {
                     console.log("password incorrect");
                     res.json({
